@@ -13,44 +13,61 @@ Architecture **Clean Architecture par feature**, pensée pour scaler.
 | Secure storage | `flutter_secure_storage` |
 | Error handling | `dartz` (`Either<Failure, T>`) |
 | Logging | `logger` (wrapper `AppLogger`) |
+| Connectivity | `connectivity_plus` (détection online/offline) |
 | Tests | `mocktail` + `fake_async` |
+| CI/CD | GitHub Actions (quality, tests, build, deploy) |
+| Dependency updates | Dependabot (PRs auto hebdomadaires) |
 
 ---
 
 ## Architecture
 
 ```
-lib/
-├── core/
-│   ├── config/            # AppConfig (dart-define, flavors)
-│   ├── di/                # Barrel des providers + infrastructure_providers
-│   ├── error/             # Hiérarchie sealed Failure
-│   ├── extensions/        # Either extensions, etc.
-│   ├── network/           # DioClient + interceptors (auth, log)
-│   ├── router/
-│   │   ├── app_router.dart    # GoRouter + guards
-│   │   └── screens/           # Placeholders (404, shell, detail)
-│   ├── theme/
-│   │   ├── app_theme.dart     # Material 3 centralisé
-│   │   └── app_dimens.dart    # Spacing, radius, paddings
-│   ├── usecase/           # Classe abstraite UseCase<T, Params>
-│   └── utils/             # AppLogger, safeCall()
-│
-└── features/
-    └── <feature>/
-        ├── di/                    # <feature>_providers.dart
-        ├── data/
-        │   ├── datasources/       # Remote (API) + Local (cache)
-        │   ├── models/            # DTOs + toDomain() + fromJson()
-        │   └── repositories/      # Implémentations concrètes
-        ├── domain/
-        │   ├── entities/          # Entités métier pures (immutables)
-        │   ├── repositories/      # Interfaces (contrats)
-        │   └── usecases/          # 1 classe = 1 cas d'usage
-        └── presentation/
-            ├── providers/         # Notifiers + sealed states
-            ├── screens/           # Pages complètes
-            └── widgets/           # Composants réutilisables
+.
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml             # Quality → Tests → Build
+│   │   └── deploy.yml         # Deploy Firebase / TestFlight
+│   └── dependabot.yml         # Mises à jour auto des deps
+├── integration_test/          # Tests E2E
+├── l10n.yaml                  # Config internationalisation
+├── license_config.yaml        # Licences autorisées
+├── lib/
+│   ├── l10n/                  # Fichiers ARB (fr, en)
+│   ├── core/
+│   │   ├── config/            # AppConfig (dart-define, flavors)
+│   │   ├── di/                # Barrel des providers + infrastructure_providers
+│   │   ├── error/             # Hiérarchie sealed Failure
+│   │   ├── extensions/        # Either extensions, etc.
+│   │   ├── network/
+│   │   │   ├── dio_client.dart        # HTTP client + interceptors
+│   │   │   ├── network_info.dart      # Connectivity check + providers
+│   │   │   └── connectivity_banner.dart # Bannière offline
+│   │   ├── router/
+│   │   │   ├── app_router.dart    # GoRouter + guards
+│   │   │   └── screens/           # Placeholders (404, shell, detail)
+│   │   ├── theme/
+│   │   │   ├── app_theme.dart     # Material 3 centralisé
+│   │   │   └── app_dimens.dart    # Spacing, radius, paddings
+│   │   ├── usecase/           # Classe abstraite UseCase<T, Params>
+│   │   └── utils/             # AppLogger, safeCall()
+│   │
+│   └── features/
+│       └── <feature>/
+│           ├── di/                    # <feature>_providers.dart
+│           ├── data/
+│           │   ├── datasources/       # Remote (API) + Local (cache)
+│           │   ├── models/            # DTOs + toDomain() + fromJson()
+│           │   └── repositories/      # Implémentations concrètes
+│           ├── domain/
+│           │   ├── entities/          # Entités métier pures (immutables)
+│           │   ├── repositories/      # Interfaces (contrats)
+│           │   └── usecases/          # 1 classe = 1 cas d'usage
+│           └── presentation/
+│               ├── providers/         # Notifiers + sealed states
+│               ├── screens/           # Pages complètes
+│               └── widgets/           # Composants réutilisables
+└── test/                          # Tests unitaires + widget
 ```
 
 ### Règle de dépendance
@@ -558,14 +575,7 @@ final isOnlineAsync = ref.watch(isOnlineProvider);
 const ConnectivityBanner()
 ```
 
-### Ajouter `NetworkFailure`
-
-Penser à ajouter dans `core/error/failures.dart` :
-```dart
-final class NetworkFailure extends Failure {
-  const NetworkFailure() : super('Aucune connexion internet.');
-}
-```
+> **Note** : `NetworkFailure` est déjà défini dans `core/error/failures.dart`.
 
 ---
 
@@ -635,10 +645,13 @@ dart format .
 # Tests unitaires + widget
 flutter test
 
-# Tests d'intégration
+# Tests d'intégration (device requis)
 flutter test integration_test/
 
 # Coverage
 flutter test --coverage
 genhtml coverage/lcov.info -o coverage/html
+
+# Déployer manuellement (via GitHub Actions)
+# → Aller dans Actions > Deploy > Run workflow > Choisir l'environnement
 ```
