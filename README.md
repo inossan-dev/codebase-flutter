@@ -439,13 +439,44 @@ flutter test
 
 ## CI/CD — GitHub Actions
 
-Le fichier `.github/workflows/ci.yml` lance automatiquement sur chaque push/PR :
+### Pipeline CI (`.github/workflows/ci.yml`)
+
+Lancé sur chaque push/PR sur `main`, `master`, `develop` :
 
 1. **Quality** — `flutter analyze --fatal-infos` + `dart format --set-exit-if-changed`
-2. **Tests** — `flutter test --coverage` + upload de l'artefact coverage
+2. **Tests** — `flutter test --coverage` + seuil de couverture minimum (60%) + audit licences
 3. **Build** — APK Android + iOS (sans codesign) en parallèle
 
-Le pipeline utilise la concurrency pour annuler les builds redondants sur la même branche.
+### Pipeline Deploy (`.github/workflows/deploy.yml`)
+
+Lancé manuellement ou sur tag `v*` :
+
+- Build APK/IPA avec les variables d'environnement du GitHub Environment
+- Upload en artifact
+- Déploiement sur **Firebase App Distribution** (Android)
+- Section TestFlight (iOS) prête à décommenter
+
+**Secrets à configurer dans GitHub** :
+- `FIREBASE_ANDROID_APP_ID` — ID de l'app Firebase
+- `FIREBASE_SERVICE_ACCOUNT` — JSON du compte de service Firebase
+- Variable `API_URL` — configurée par environnement (staging/production)
+
+### Dependabot (`.github/dependabot.yml`)
+
+Crée automatiquement des PRs de mise à jour chaque lundi :
+- **Dépendances Dart** groupées (flutter, riverpod, code-gen) pour éviter le spam
+- **GitHub Actions** mises à jour séparément
+- Labels automatiques (`dependencies`, `dart`, `ci`)
+
+### Couverture de code
+
+Le CI échoue si la couverture tombe sous **60%** (modifiable dans `ci.yml`).
+Les fichiers générés (`*.g.dart`, `*.freezed.dart`, `l10n/`) sont exclus.
+
+### Audit de licences
+
+Le fichier `license_config.yaml` définit les licences autorisées (MIT, BSD, Apache, etc.).
+Le CI vérifie qu'aucune dépendance n'introduit une licence incompatible.
 
 ---
 

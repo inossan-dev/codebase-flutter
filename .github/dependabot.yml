@@ -1,0 +1,43 @@
+version: 2
+
+updates:
+  # Mise à jour des dépendances Dart/Flutter (pubspec.yaml)
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "dart"
+    # Grouper les mises à jour mineures pour éviter le spam de PRs
+    groups:
+      flutter-deps:
+        patterns:
+          - "flutter_*"
+          - "riverpod*"
+          - "go_router"
+        update-types:
+          - "minor"
+          - "patch"
+      code-gen:
+        patterns:
+          - "build_runner"
+          - "freezed*"
+          - "json_*"
+          - "riverpod_generator"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Mise à jour des GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci"

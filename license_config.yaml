@@ -1,0 +1,12 @@
+# Licences autorisées dans le projet.
+# Le CI échouera si une dépendance utilise une licence non listée.
+allowedLicenses:
+  - MIT
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - Apache-2.0
+  - ISC
+  - Zlib
+
+# Packages à ignorer (packages Flutter SDK, etc.)
+rejectedPackages: []

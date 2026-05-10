@@ -63,6 +63,18 @@ jobs:
           name: coverage
           path: coverage/lcov.info
 
+      - name: Check coverage threshold
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: coverage/lcov.info
+          min_coverage: 60
+          exclude: "**/*.g.dart **/*.freezed.dart **/l10n/**"
+
+      - name: Check dependency licenses
+        run: |
+          dart pub global activate license_checker
+          dart pub global run license_checker --config license_config.yaml || true
+
   build:
     name: Build (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
