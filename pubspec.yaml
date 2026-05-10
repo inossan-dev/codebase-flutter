@@ -37,6 +37,7 @@ dependencies:
   equatable: ^2.0.5
   dartz: ^0.10.1  # Either / functional error handling
   intl: ^0.20.2
+  connectivity_plus: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +60,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  # generate: true # Activer quand les fichiers .arb seront créés
+  generate: true
 
   assets:
     - assets/images/

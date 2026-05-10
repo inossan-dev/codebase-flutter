@@ -1,0 +1,39 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Codebase",
+  "@appTitle": {
+    "description": "Titre de l'application"
+  },
+  "login": "Connexion",
+  "@login": {
+    "description": "Titre de l'écran de connexion"
+  },
+  "loginSubtitle": "Bienvenue ! Entrez vos identifiants.",
+  "email": "Email",
+  "emailHint": "vous@example.com",
+  "emailRequired": "L'email est requis.",
+  "emailInvalid": "Format d'email invalide.",
+  "password": "Mot de passe",
+  "passwordRequired": "Le mot de passe est requis.",
+  "passwordMinLength": "Le mot de passe doit contenir au moins {min} caractères.",
+  "@passwordMinLength": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "signIn": "Se connecter",
+  "logout": "Déconnexion",
+  "home": "Accueil",
+  "welcome": "Bienvenue !",
+  "codebaseReady": "Votre codebase est prête.",
+  "notFound": "Page introuvable",
+  "notFoundCode": "404",
+  "back": "Retour",
+  "networkError": "Erreur réseau. Vérifiez votre connexion.",
+  "serverError": "Erreur serveur. Réessayez plus tard.",
+  "unexpectedError": "Une erreur inattendue est survenue.",
+  "noConnection": "Aucune connexion internet.",
+  "connectionRestored": "Connexion rétablie."
+}

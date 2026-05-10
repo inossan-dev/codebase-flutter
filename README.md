@@ -437,10 +437,159 @@ flutter test
 
 ---
 
+## CI/CD — GitHub Actions
+
+Le fichier `.github/workflows/ci.yml` lance automatiquement sur chaque push/PR :
+
+1. **Quality** — `flutter analyze --fatal-infos` + `dart format --set-exit-if-changed`
+2. **Tests** — `flutter test --coverage` + upload de l'artefact coverage
+3. **Build** — APK Android + iOS (sans codesign) en parallèle
+
+Le pipeline utilise la concurrency pour annuler les builds redondants sur la même branche.
+
+---
+
+## Internationalisation (l10n)
+
+### Configuration
+
+- Fichiers ARB : `lib/l10n/app_fr.arb` (template) + `lib/l10n/app_en.arb`
+- Config : `l10n.yaml` à la racine
+- Activation : `generate: true` dans `pubspec.yaml`
+
+### Ajouter une traduction
+
+1. Ajouter la clé dans `lib/l10n/app_fr.arb` (template) :
+   ```json
+   "productTitle": "Produits",
+   "@productTitle": { "description": "Titre de la page produits" }
+   ```
+
+2. Ajouter la traduction dans `lib/l10n/app_en.arb` :
+   ```json
+   "productTitle": "Products"
+   ```
+
+3. Relancer `flutter pub get` (la génération est automatique)
+
+### Usage dans un widget
+
+```dart
+import 'package:codebase/l10n/app_localizations.dart';
+
+// Dans build() :
+final l10n = AppLocalizations.of(context);
+Text(l10n.productTitle);
+```
+
+### Ajouter une langue
+
+Créer `lib/l10n/app_<code>.arb` (ex: `app_es.arb`) avec les mêmes clés.
+
+---
+
+## Connectivité réseau
+
+### Architecture
+
+```
+core/network/
+├── dio_client.dart          # HTTP client
+├── network_info.dart        # NetworkInfo + providers (isOnline)
+└── connectivity_banner.dart # Widget bannière offline
+```
+
+### Vérifier la connexion dans un repository
+
+```dart
+final class MyRepositoryImpl implements MyRepository {
+  const MyRepositoryImpl(this._remote, this._networkInfo);
+  final MyRemoteDatasource _remote;
+  final NetworkInfo _networkInfo;
+
+  @override
+  Future<Either<Failure, Data>> fetchData() async {
+    if (!await _networkInfo.isConnected) {
+      return const Left(NetworkFailure());
+    }
+    return safeCall(tag: 'fetchData', action: () => _remote.getData());
+  }
+}
+```
+
+### Réagir au changement dans l'UI
+
+```dart
+// Utiliser le provider réactif
+final isOnlineAsync = ref.watch(isOnlineProvider);
+
+// Ou afficher la bannière globale
+const ConnectivityBanner()
+```
+
+### Ajouter `NetworkFailure`
+
+Penser à ajouter dans `core/error/failures.dart` :
+```dart
+final class NetworkFailure extends Failure {
+  const NetworkFailure() : super('Aucune connexion internet.');
+}
+```
+
+---
+
+## Tests d'intégration
+
+### Emplacement
+
+```
+integration_test/
+└── app_test.dart    # Tests E2E sur device/émulateur
+```
+
+### Lancer
+
+```bash
+# Sur un émulateur/device connecté
+flutter test integration_test/app_test.dart
+
+# Sur un appareil spécifique
+flutter test integration_test/app_test.dart -d <device_id>
+
+# Avec screenshots (CI)
+flutter test integration_test/ --machine > results.json
+```
+
+### Bonnes pratiques
+
+- **Isoler** : chaque test recrée l'app (pas d'état partagé)
+- **Mocker le backend** : utiliser des `overrides` de providers pour injecter des fakes
+- **Garder courts** : tester les flux critiques (login, navigation, CRUD)
+- **Pas de `sleep()`** : utiliser `pumpAndSettle()` ou `pump(Duration)`
+
+### Exemple de mock de backend
+
+```dart
+testWidgets('affiche les produits', (tester) async {
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        productRepositoryProvider.overrideWithValue(FakeProductRepository()),
+      ],
+      child: const AppRoot(),
+    ),
+  );
+  await tester.pumpAndSettle();
+  expect(find.text('Product 1'), findsOneWidget);
+});
+```
+
+---
+
 ## Commandes utiles
 
 ```bash
-# Générer le code
+# Générer le code (riverpod, freezed, json)
 dart run build_runner build --delete-conflicting-outputs
 
 # Watch mode (regénère à chaque save)
@@ -449,8 +598,14 @@ dart run build_runner watch --delete-conflicting-outputs
 # Analyse statique
 flutter analyze
 
+# Formatage
+dart format .
+
 # Tests unitaires + widget
 flutter test
+
+# Tests d'intégration
+flutter test integration_test/
 
 # Coverage
 flutter test --coverage

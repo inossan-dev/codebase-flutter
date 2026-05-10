@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_void_async
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'package:codebase/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:codebase/core/di/providers.dart';
@@ -51,7 +54,7 @@ class AppRoot extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
-      title: 'Flutter Base',
+      title: 'Codebase',
       debugShowCheckedModeBanner: false,
 
       // ─── Thème ────────────────────────────────────────────────────────────
@@ -63,9 +66,14 @@ class AppRoot extends ConsumerWidget {
       routerConfig: router,
 
       // ─── Localisation ─────────────────────────────────────────────────────
-      // supportedLocales et localizationsDelegates générés par flutter gen-l10n
-      // supportedLocales: AppLocalizations.supportedLocales,
-      // localizationsDelegates: AppLocalizations.localizationsDelegates,
+      locale: const Locale('fr'),
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }
