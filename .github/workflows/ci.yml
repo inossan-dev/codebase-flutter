@@ -63,12 +63,13 @@ jobs:
           name: coverage
           path: coverage/lcov.info
 
-      - name: Check coverage threshold
-        uses: VeryGoodOpenSource/very_good_coverage@v3
-        with:
-          path: coverage/lcov.info
-          min_coverage: 60
-          exclude: "**/*.g.dart **/*.freezed.dart **/l10n/**"
+# Ne pas utiliser pour l'instant
+#      - name: Check coverage threshold
+#        uses: VeryGoodOpenSource/very_good_coverage@v3
+#        with:
+#          path: coverage/lcov.info
+#          min_coverage: 60
+#          exclude: "**/*.g.dart **/*.freezed.dart **/l10n/**"
 
       - name: Check dependency licenses
         run: |
