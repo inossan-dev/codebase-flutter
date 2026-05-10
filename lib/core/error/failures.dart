@@ -20,7 +20,9 @@ sealed class Failure extends Equatable {
 
 /// Erreur réseau (timeout, pas de connexion, erreur HTTP 5xx)
 final class NetworkFailure extends Failure {
-  const NetworkFailure([super.message = 'Erreur réseau. Vérifiez votre connexion.']);
+  const NetworkFailure([
+    super.message = 'Erreur réseau. Vérifiez votre connexion.',
+  ]);
 }
 
 /// Ressource non trouvée (HTTP 404)
@@ -30,7 +32,9 @@ final class NotFoundFailure extends Failure {
 
 /// Authentification invalide (HTTP 401)
 final class UnauthorizedFailure extends Failure {
-  const UnauthorizedFailure([super.message = 'Session expirée. Reconnectez-vous.']);
+  const UnauthorizedFailure([
+    super.message = 'Session expirée. Reconnectez-vous.',
+  ]);
 }
 
 /// Accès refusé (HTTP 403)
@@ -55,5 +59,7 @@ final class CacheFailure extends Failure {
 
 /// Cas inattendu, à logger impérativement
 final class UnexpectedFailure extends Failure {
-  const UnexpectedFailure([super.message = 'Une erreur inattendue est survenue.']);
+  const UnexpectedFailure([
+    super.message = 'Une erreur inattendue est survenue.',
+  ]);
 }

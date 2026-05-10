@@ -21,22 +21,19 @@ final class LoginUseCase extends UseCase<User, LoginParams> {
   Future<Either<Failure, User>> call(LoginParams params) {
     // Validation domaine (règles métier, pas UI)
     if (!_isValidEmail(params.email)) {
-      return Future.value(
-        const Left(ValidationFailure('Email invalide.')),
-      );
+      return Future.value(const Left(ValidationFailure('Email invalide.')));
     }
     if (params.password.length < 8) {
       return Future.value(
         const Left(
-          ValidationFailure('Le mot de passe doit contenir au moins 8 caractères.'),
+          ValidationFailure(
+            'Le mot de passe doit contenir au moins 8 caractères.',
+          ),
         ),
       );
     }
 
-    return _repository.login(
-      email: params.email,
-      password: params.password,
-    );
+    return _repository.login(email: params.email, password: params.password);
   }
 
   static bool _isValidEmail(String email) {

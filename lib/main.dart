@@ -39,9 +39,7 @@ void main() async {
 
   runApp(
     // ProviderScope au niveau le plus haut → pas de UnprovisionedWidgetError
-    const ProviderScope(
-      child: AppRoot(),
-    ),
+    const ProviderScope(child: AppRoot()),
   );
 }
 

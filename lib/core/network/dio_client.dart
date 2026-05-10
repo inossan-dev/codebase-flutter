@@ -18,11 +18,9 @@ const _kTokenKey = 'auth_token';
 /// - Mapping DioException → Failure (domaine)
 /// - Logging des requêtes/réponses
 final class DioClient {
-  DioClient({
-    Dio? dio,
-    FlutterSecureStorage? storage,
-  })  : _dio = dio ?? Dio(),
-        _storage = storage ?? const FlutterSecureStorage() {
+  DioClient({Dio? dio, FlutterSecureStorage? storage})
+    : _dio = dio ?? Dio(),
+      _storage = storage ?? const FlutterSecureStorage() {
     _configure();
   }
 
@@ -110,7 +108,10 @@ final class _LogInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     AppLogger.d('← ${response.statusCode} ${response.requestOptions.path}');
     handler.next(response);
   }
@@ -134,8 +135,9 @@ Failure dioExceptionToFailure(DioException e) {
   return switch (e.type) {
     DioExceptionType.connectionTimeout ||
     DioExceptionType.receiveTimeout ||
-    DioExceptionType.sendTimeout =>
-      const NetworkFailure('Délai dépassé. Vérifiez votre connexion.'),
+    DioExceptionType.sendTimeout => const NetworkFailure(
+      'Délai dépassé. Vérifiez votre connexion.',
+    ),
     DioExceptionType.connectionError => const NetworkFailure(),
     DioExceptionType.badResponse => _statusToFailure(e.response?.statusCode),
     DioExceptionType.cancel => const UnexpectedFailure('Requête annulée.'),
@@ -144,9 +146,9 @@ Failure dioExceptionToFailure(DioException e) {
 }
 
 Failure _statusToFailure(int? statusCode) => switch (statusCode) {
-      401 => const UnauthorizedFailure(),
-      403 => const ForbiddenFailure(),
-      404 => const NotFoundFailure(),
-      final code? when code >= 500 => const ServerFailure(),
-      _ => const UnexpectedFailure(),
-    };
+  401 => const UnauthorizedFailure(),
+  403 => const ForbiddenFailure(),
+  404 => const NotFoundFailure(),
+  final code? when code >= 500 => const ServerFailure(),
+  _ => const UnexpectedFailure(),
+};

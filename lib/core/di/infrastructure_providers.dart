@@ -14,9 +14,7 @@ part 'infrastructure_providers.g.dart';
 FlutterSecureStorage secureStorage(Ref ref) {
   return const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
-    iOptions: IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock,
-    ),
+    iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
   );
 }
 
@@ -37,6 +35,6 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   void setLight() => state = ThemeMode.light;
   void setDark() => state = ThemeMode.dark;
   void setSystem() => state = ThemeMode.system;
-  void toggle() => state =
-      state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+  void toggle() =>
+      state = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
 }

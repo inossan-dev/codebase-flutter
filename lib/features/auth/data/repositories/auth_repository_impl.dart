@@ -21,8 +21,8 @@ final class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({
     required AuthRemoteDatasource remote,
     required AuthLocalDatasource local,
-  })  : _remote = remote,
-        _local = local;
+  }) : _remote = remote,
+       _local = local;
 
   final AuthRemoteDatasource _remote;
   final AuthLocalDatasource _local;

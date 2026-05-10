@@ -23,12 +23,20 @@ Stream<User?> authState(Ref ref) {
 sealed class LoginState {
   const LoginState();
 }
-final class LoginIdle extends LoginState { const LoginIdle(); }
-final class LoginLoading extends LoginState { const LoginLoading(); }
+
+final class LoginIdle extends LoginState {
+  const LoginIdle();
+}
+
+final class LoginLoading extends LoginState {
+  const LoginLoading();
+}
+
 final class LoginSuccess extends LoginState {
   const LoginSuccess(this.user);
   final User user;
 }
+
 final class LoginError extends LoginState {
   const LoginError(this.message);
   final String message;
@@ -45,18 +53,13 @@ class LoginNotifier extends _$LoginNotifier {
   @override
   LoginState build() => const LoginIdle();
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     if (state is LoginLoading) return; // garde anti-double-tap
 
     state = const LoginLoading();
 
     final useCase = ref.read(loginUseCaseProvider);
-    final result = await useCase(
-      LoginParams(email: email, password: password),
-    );
+    final result = await useCase(LoginParams(email: email, password: password));
 
     // fold : Left → erreur, Right → succès
     result.fold(

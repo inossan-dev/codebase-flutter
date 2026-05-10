@@ -9,7 +9,7 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text('Detail: $id')),
-        body: Center(child: Text('Contenu pour l\'élément $id')),
-      );
+    appBar: AppBar(title: Text('Detail: $id')),
+    body: Center(child: Text('Contenu pour l\'élément $id')),
+  );
 }

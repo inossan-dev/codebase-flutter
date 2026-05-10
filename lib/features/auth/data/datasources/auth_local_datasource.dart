@@ -47,9 +47,7 @@ final class AuthLocalDatasource {
     try {
       final raw = await _storage.read(key: _kUserKey);
       if (raw == null) return null;
-      return UserModel.fromJson(
-        jsonDecode(raw) as Map<String, dynamic>,
-      );
+      return UserModel.fromJson(jsonDecode(raw) as Map<String, dynamic>);
     } catch (e, st) {
       AppLogger.w('Failed to read cached user, clearing cache', e, st);
       await _storage.delete(key: _kUserKey);

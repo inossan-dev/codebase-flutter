@@ -20,11 +20,10 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('App Integration Tests', () {
-    testWidgets('démarre sur l\'écran de login quand non authentifié',
-        (tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: AppRoot()),
-      );
+    testWidgets('démarre sur l\'écran de login quand non authentifié', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const ProviderScope(child: AppRoot()));
       await tester.pumpAndSettle();
 
       // Vérifier qu'on arrive bien sur le login
@@ -33,11 +32,10 @@ void main() {
       expect(find.text('Mot de passe'), findsOneWidget);
     });
 
-    testWidgets('affiche une erreur de validation si email vide',
-        (tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: AppRoot()),
-      );
+    testWidgets('affiche une erreur de validation si email vide', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const ProviderScope(child: AppRoot()));
       await tester.pumpAndSettle();
 
       // Taper sur "Se connecter" sans remplir
@@ -50,16 +48,11 @@ void main() {
     });
 
     testWidgets('le champ email valide le format', (tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: AppRoot()),
-      );
+      await tester.pumpWidget(const ProviderScope(child: AppRoot()));
       await tester.pumpAndSettle();
 
       // Entrer un email invalide
-      await tester.enterText(
-        find.byType(TextFormField).first,
-        'not-an-email',
-      );
+      await tester.enterText(find.byType(TextFormField).first, 'not-an-email');
       await tester.tap(find.text('Se connecter'));
       await tester.pumpAndSettle();
 

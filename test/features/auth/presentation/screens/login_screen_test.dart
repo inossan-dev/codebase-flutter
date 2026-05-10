@@ -36,9 +36,7 @@ Widget testableWidget({
 void main() {
   group('LoginScreen', () {
     testWidgets('affiche le formulaire dans l\'état initial', (tester) async {
-      await tester.pumpWidget(
-        testableWidget(child: const LoginScreen()),
-      );
+      await tester.pumpWidget(testableWidget(child: const LoginScreen()));
 
       expect(find.text('Connexion'), findsOneWidget);
       expect(find.text('Email'), findsOneWidget);
@@ -47,9 +45,7 @@ void main() {
     });
 
     testWidgets('valide le formulaire avant de soumettre', (tester) async {
-      await tester.pumpWidget(
-        testableWidget(child: const LoginScreen()),
-      );
+      await tester.pumpWidget(testableWidget(child: const LoginScreen()));
 
       // Cliquer sans remplir le formulaire
       await tester.tap(find.text('Se connecter'));
@@ -60,7 +56,9 @@ void main() {
       expect(find.text('Le mot de passe est requis.'), findsOneWidget);
     });
 
-    testWidgets('affiche un CircularProgressIndicator en état loading', (tester) async {
+    testWidgets('affiche un CircularProgressIndicator en état loading', (
+      tester,
+    ) async {
       final mockNotifier = MockLoginNotifier();
 
       await tester.pumpWidget(

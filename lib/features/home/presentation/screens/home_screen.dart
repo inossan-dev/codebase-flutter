@@ -12,9 +12,7 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Accueil'),
-      ),
+      appBar: AppBar(title: const Text('Accueil')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -25,10 +23,7 @@ class HomeScreen extends ConsumerWidget {
               color: theme.colorScheme.primary,
             ),
             const SizedBox(height: 16),
-            Text(
-              'Bienvenue !',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('Bienvenue !', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 8),
             Text(
               'Votre codebase est prête.',

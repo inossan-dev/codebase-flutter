@@ -101,9 +101,7 @@ abstract final class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: colorScheme.outlineVariant,
-          ),
+          side: BorderSide(color: colorScheme.outlineVariant),
         ),
       ),
     );

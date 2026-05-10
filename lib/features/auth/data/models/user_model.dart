@@ -15,11 +15,11 @@ final class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        id: json['id'] as String,
-        email: json['email'] as String,
-        displayName: json['display_name'] as String?,
-        avatarUrl: json['avatar_url'] as String?,
-      );
+    id: json['id'] as String,
+    email: json['email'] as String,
+    displayName: json['display_name'] as String?,
+    avatarUrl: json['avatar_url'] as String?,
+  );
 
   final String id;
   final String email;
@@ -27,18 +27,18 @@ final class UserModel {
   final String? avatarUrl;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        'display_name': displayName,
-        'avatar_url': avatarUrl,
-      };
+    'id': id,
+    'email': email,
+    'display_name': displayName,
+    'avatar_url': avatarUrl,
+  };
 
   /// Conversion data → domaine.
   /// Le domaine ne connaît jamais UserModel, uniquement User.
   User toDomain() => User(
-        id: id,
-        email: email,
-        displayName: displayName,
-        avatarUrl: avatarUrl,
-      );
+    id: id,
+    email: email,
+    displayName: displayName,
+    avatarUrl: avatarUrl,
+  );
 }

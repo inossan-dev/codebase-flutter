@@ -39,7 +39,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Fermer le clavier
     FocusScope.of(context).unfocus();
 
-    await ref.read(loginNotifierProvider.notifier).login(
+    await ref
+        .read(loginNotifierProvider.notifier)
+        .login(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -112,8 +114,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       if (value == null || value.trim().isEmpty) {
                         return 'L\'email est requis.';
                       }
-                      if (!RegExp(r'^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$')
-                          .hasMatch(value.trim())) {
+                      if (!RegExp(
+                        r'^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$',
+                      ).hasMatch(value.trim())) {
                         return 'Format d\'email invalide.';
                       }
                       return null;
@@ -137,9 +140,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
                       ),
-                      onPressed: () => setState(
-                        () => _obscurePassword = !_obscurePassword,
-                      ),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                     onFieldSubmitted: (_) => _submit(),
                     validator: (value) {

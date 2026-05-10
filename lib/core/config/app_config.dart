@@ -13,10 +13,7 @@ final class AppConfig {
 
   /// Doit être appelé **une seule fois** dans main(), avant runApp().
   /// Un double appel lèvera une assertion en debug.
-  static void init({
-    required String flavor,
-    required String apiBaseUrl,
-  }) {
+  static void init({required String flavor, required String apiBaseUrl}) {
     assert(!_initialized, 'AppConfig.init() called more than once');
     AppConfig.flavor = flavor;
     AppConfig.apiBaseUrl = apiBaseUrl;

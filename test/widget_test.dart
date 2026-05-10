@@ -5,9 +5,7 @@ import 'package:codebase/main.dart';
 
 void main() {
   testWidgets('AppRoot renders without crashing', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(child: AppRoot()),
-    );
+    await tester.pumpWidget(const ProviderScope(child: AppRoot()));
     // Le login screen devrait apparaître (non authentifié)
     await tester.pumpAndSettle();
     expect(find.text('Connexion'), findsOneWidget);

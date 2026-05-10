@@ -14,4 +14,5 @@ export 'package:codebase/features/auth/di/auth_providers.dart';
 // Alias pratique pour les consommateurs
 // ignore: unused_import
 import 'package:codebase/core/di/infrastructure_providers.dart';
+
 final themeModeProvider = themeModeNotifierProvider;

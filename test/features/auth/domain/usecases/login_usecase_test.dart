@@ -46,7 +46,10 @@ void main() {
           (_) => fail('Devrait retourner un Left'),
         );
         verifyNever(
-          () => mockRepository.login(email: any(named: 'email'), password: any(named: 'password')),
+          () => mockRepository.login(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
         );
       });
 
